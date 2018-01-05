@@ -1,0 +1,19 @@
+{
+  "name": "message-delivery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asaulyak/message-delivery.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/asaulyak/message-delivery/issues"
+  },
+  "homepage": "https://github.com/asaulyak/message-delivery#readme"
+}
