@@ -5,6 +5,7 @@ module.exports = {
   },
   transport: {
     email: {
+      recipient: 'jenya.asaulyak@gmail.com',
       login: 'text.alteryx@gmail.com',
       service: 'gmail',
       replyTo: 'jenya.asaulyak@gmail.com',

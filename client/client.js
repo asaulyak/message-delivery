@@ -23,7 +23,7 @@ class Client {
       .flatMap(reply => reply.channel.consume(config.rabbitMQ.queue, {noAck: false}))
       .doOnNext(message => console.log(' [x] Received: %s', message.content.toString()))
       .doOnNext(message => transport.send({
-        to: 'jenya.asaulyak@gmail.com',
+        to: config.transport.email.recipient,
         subject: 'Hi !',
         text: message.content.toString()
       }).subscribe(response => console.log(' [x] Transporter response', response)))
