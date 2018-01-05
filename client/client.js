@@ -1,4 +1,4 @@
-const amqp = require('rx-amqplib');
+const RxAmqpLib = require('rx-amqplib');
 const config = require('../config');
 const transport = require('./transport')[config.transport.defaultTransport];
 
@@ -8,22 +8,28 @@ class Client {
   }
 
   connect() {
-    return amqp.newConnection(config.rabbitMQ.host);
-  }
-
-  close() {
-    this.connection.close();
+    return RxAmqpLib.newConnection(config.rabbitMQ.host);
   }
 
   listen() {
     this.connection
+      .doOnNext(() => console.log(` [*] Waiting for messages in ${config.rabbitMQ.queue}. To exit press CTRL+C`))
+      .doOnNext(connection => process.once('SIGINT', () => {
+        connection.close();
+      }))
       .flatMap(connection => connection.createChannel())
-      .flatMap(channel => channel.assertQueue(config.rabbitMQ.queue, { durable: true }))
+      .flatMap(channel => channel.assertQueue(config.rabbitMQ.queue, {durable: true}))
       .flatMap(reply => reply.channel.prefetch(1))
-      .flatMap(reply => reply.channel.consume(config.rabbitMQ.queue, { noAck: false }))
-      .doOnNext(message => console.log('[x] Received: %s', message.content.toString()))
-      .delay(2000)
+      .flatMap(reply => reply.channel.consume(config.rabbitMQ.queue, {noAck: false}))
+      .doOnNext(message => console.log(' [x] Received: %s', message.content.toString()))
+      .doOnNext(message => transport.send({
+        to: 'jenya.asaulyak@gmail.com',
+        subject: 'Hi !',
+        text: message.content.toString()
+      }).subscribe(response => console.log(' [x] Transporter response', response)))
       .doOnNext(reply => reply.ack())
-      .subscribe(() => console.log('[ ] Done'), console.error);
+      .subscribe();
   }
 }
+
+module.exports = Client;

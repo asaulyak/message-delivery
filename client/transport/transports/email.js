@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const config = require('../../../config');
+const Rx = require('rxjs/Rx');
 
 class EmailTransport {
   constructor() {
@@ -22,16 +23,8 @@ class EmailTransport {
       replyTo: config.transport.email.replyTo
     };
 
-    return new Promise((resolve, reject) => {
-      this.transporter.sendMail(Object.assign({}, message, messageOptions), (error, data) => {
-        if (error) {
-          reject(error);
-        }
-        else {
-          resolve(data);
-        }
-      });
-    });
+    return Rx.Observable.bindCallback(this.transporter.sendMail)
+      .call(this.transporter, Object.assign({}, message, messageOptions));
   }
 }
 
