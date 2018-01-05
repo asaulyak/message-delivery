@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/asaulyak/message-delivery/issues"
   },
-  "homepage": "https://github.com/asaulyak/message-delivery#readme"
+  "homepage": "https://github.com/asaulyak/message-delivery#readme",
+  "dependencies": {
+    "amqplib": "^0.5.2",
+    "nodemailer": "^4.4.1"
+  }
 }
