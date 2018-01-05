@@ -18,7 +18,9 @@
   "homepage": "https://github.com/asaulyak/message-delivery#readme",
   "dependencies": {
     "amqplib": "^0.5.2",
-    "nodemailer": "^4.4.1"
+    "nodemailer": "^4.4.1",
+    "rx-amqplib": "^0.1.6",
+    "rxjs": "^5.5.6"
   },
   "devDependencies": {
     "require-all": "^2.2.0"
