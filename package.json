@@ -19,5 +19,8 @@
   "dependencies": {
     "amqplib": "^0.5.2",
     "nodemailer": "^4.4.1"
+  },
+  "devDependencies": {
+    "require-all": "^2.2.0"
   }
 }
