@@ -1,7 +1,7 @@
 const amqp = require('amqplib');
 const config = require('../config');
 
-amqp.connect(config.rabbitMQ.connection)
+amqp.connect(config.rabbitMQ.host)
   .then(connection => {
     return connection.createChannel()
       .then(channel => channel.assertQueue(config.rabbitMQ.queue, {durable: true})

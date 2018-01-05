@@ -2,7 +2,7 @@ const amqp = require('amqplib');
 const config = require('../config');
 const transport = require('./transport')[config.transport.defaultTransport];
 
-amqp.connect(config.rabbitMQ.connection)
+amqp.connect(config.rabbitMQ.host)
   .then(connection => {
     process.once('SIGINT', () => {
       connection.close();
@@ -13,17 +13,7 @@ amqp.connect(config.rabbitMQ.connection)
         .then(() => {
           ch.prefetch(1);
           ch.consume(config.rabbitMQ.queue, worker, {noAck: true});
-          console.log(' [*] Waiting for messages. To exit press CTRL+C');
-
-          function doWork(msg) {
-            const body = msg.content.toString();
-            console.log(' [x] Received \'%s\'', body);
-            const secs = body.split('.').length - 1;
-            setTimeout(function () {
-              console.log(' [x] Done');
-              ch.ack(msg);
-            }, secs * 1000);
-          }
+          console.log(` [*] Waiting for messages in ${config.rabbitMQ.queue}. To exit press CTRL+C`);
 
           return ch;
         }));
@@ -37,9 +27,8 @@ const worker = message => {
   transport.send({
     to: 'jenya.asaulyak@gmail.com',
     text: body,
-    subject: 'Hi!'
+    subject: 'Hi !'
   })
-    .catch(error => {
-      console.log('Error occurred', error);
-    });
+    .then(data => console.log(' [x] Transporter response', data))
+    .catch(error => console.log(' [x] Error occurred', error));
 };
